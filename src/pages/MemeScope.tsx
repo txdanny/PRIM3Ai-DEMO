@@ -286,7 +286,7 @@ function MemeScope() {
                 Filter
               </motion.button>
             </div>
-            <div className="flex-1 flex flex-col overflow-hidden">
+            <div className="flex-1 flex flex-col overflow-y-auto">
               <AnimatePresence mode="wait">
                 {categoryStates["newly-created"].showFilters ? (
                   <motion.div
@@ -295,6 +295,7 @@ function MemeScope() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 20 }}
                     transition={{ duration: 0.2 }}
+                    className="flex-1 overflow-y-auto space-y-3 mt-2"
                   >
                     <FilterPanel
                       category="newly-created"
@@ -351,7 +352,7 @@ function MemeScope() {
                 Filter
               </motion.button>
             </div>
-            <div className="flex-1 flex flex-col overflow-hidden">
+            <div className="flex-1 flex flex-col overflow-auto">
               <AnimatePresence mode="wait">
                 {categoryStates["about-to-graduate"].showFilters ? (
                   <motion.div
@@ -416,7 +417,7 @@ function MemeScope() {
                 Filter
               </motion.button>
             </div>
-            <div className="flex-1 flex flex-col overflow-hidden">
+            <div className="flex-1 flex flex-col overflow-auto">
               <AnimatePresence mode="wait">
                 {categoryStates["graduated"].showFilters ? (
                   <motion.div
