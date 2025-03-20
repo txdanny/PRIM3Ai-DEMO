@@ -1,14 +1,19 @@
 import React from "react";
+import { motion } from "framer-motion";
 import {
-  ArrowUp,
-  ArrowDown,
+  ArrowUpRight,
+  ArrowDownRight,
+  Copy,
+  ExternalLink,
   Users,
-  Zap,
   TrendingUp,
   DollarSign,
   Coins,
   Activity,
+  ArrowUp,
+  ArrowDown,
 } from "lucide-react";
+import TokenMetrics from "./TokenMetrics";
 import type { Token } from "../types/token";
 import QuickBuy from "./ui/QuickBuy";
 
@@ -69,130 +74,128 @@ const TokenCard: React.FC<TokenCardProps> = ({ token }) => {
     return n.toFixed(2);
   };
 
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+  };
+
   return (
-    <div className="group bg-background-tertiary rounded-xl p-4 w-full hover:bg-background-secondary transition-all duration-300 cursor-pointer border border-background-tertiary hover:border-accent-blue/20 hover:shadow-lg hover:shadow-accent-blue/5">
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center justify-between w-full">
-          <div className="flex items-center gap-3">
-            <div className="relative w-16 h-16">
-              <svg
-                width={radius * 2}
-                height={radius * 2}
-                viewBox={`0 0 ${radius * 2} ${radius * 2}`}
-                className="absolute top-0 left-0 w-16 h-16"
-              >
-                <circle
-                  stroke="#1A1A1A"
-                  fill="transparent"
-                  strokeWidth={strokeWidth}
-                  r={normalizedRadius}
-                  cx={radius}
-                  cy={radius}
-                />
-                <circle
-                  stroke="currentColor"
-                  fill="transparent"
-                  strokeWidth={strokeWidth}
-                  strokeDasharray={circumference + " " + circumference}
-                  style={{ strokeDashoffset }}
-                  r={normalizedRadius}
-                  cx={radius}
-                  cy={radius}
-                  className={`rotate-[-90deg] origin-[50%_50%] transition-all duration-500 ${
-                    progress >= 100
-                      ? "text-green-500"
-                      : progress >= 70
-                      ? "text-yellow-500"
-                      : "text-accent-blue"
-                  }`}
-                />
-              </svg>
-              {token.imageUrl ? (
-                <img
-                  src={token.imageUrl}
-                  alt={token.symbol}
-                  className="absolute top-3 left-3 w-10 h-10 rounded-full ring-2 ring-background-tertiary"
-                />
-              ) : (
-                <div className="absolute top-3 left-3 w-10 h-10 rounded-full bg-accent-blue/20 flex items-center justify-center ring-2 ring-background-tertiary">
-                  <Zap className="w-4 h-4 text-accent-blue" />
-                </div>
-              )}
-              <div className="absolute -top-1 -right-1 text-[8px] font-medium bg-background-secondary/80 rounded-full px-1.5 py-0.5 border border-background-tertiary backdrop-blur-sm">
-                {progress.toFixed(0)}%
-              </div>
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-semibold text-base">{token.symbol}</span>
-                <img
-                  src="https://i.postimg.cc/63LXRtM0/Pump-fun-logo.png"
-                  alt="View on pump.fun"
-                  className="w-4 h-4 cursor-pointer hover:opacity-80 transition-opacity"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    window.open(
-                      `https://pump.fun/token/${token.address}`,
-                      "_blank"
-                    );
-                  }}
-                />
-              </div>
-              <div className="text-xs text-foreground-secondary flex items-center gap-1">
-                <Activity className="w-3 h-3" />
-                {formatTimeAgo(token.createdAt)}
+    <motion.div className="bg-background-secondary rounded-xl p-4 border border-background-tertiary hover:border-accent-blue/30 transition-colors overflow-hidden">
+      <div className="flex items-start justify-between mb-4">
+        <div className="flex items-center gap-3">
+          <div className="relative flex-shrink-0">
+            <img
+              src={token.logo}
+              alt={token.name}
+              className="w-10 h-10 rounded-full"
+            />
+            <motion.div
+              className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-background"
+              style={{
+                backgroundColor: token.priceChange >= 0 ? "#22c55e" : "#ef4444",
+              }}
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", stiffness: 200, damping: 10 }}
+            />
+          </div>
+          <div className="min-w-0">
+            <h3 className="font-medium text-foreground truncate">
+              {token.name}
+            </h3>
+            <div className="flex items-center gap-2 mt-0.5">
+              <span className="text-sm text-foreground-secondary">
+                {token.symbol}
+              </span>
+              <div className="flex items-center gap-1">
+                <motion.button
+                  onClick={() => copyToClipboard(token.address)}
+                  className="p-1 hover:bg-background-tertiary rounded-lg transition-colors"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <Copy className="w-3 h-3 text-foreground-secondary" />
+                </motion.button>
+                <motion.a
+                  href={`https://solscan.io/token/${token.address}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-1 hover:bg-background-tertiary rounded-lg transition-colors"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <ExternalLink className="w-3 h-3 text-foreground-secondary" />
+                </motion.a>
               </div>
             </div>
           </div>
-          <QuickBuy solAmount={quickBuyAmount} onBuy={() => {}} />
+        </div>
+        <div className="flex items-center gap-2 flex-shrink-0">
+          <span
+            className={`text-sm font-medium ${
+              token.priceChange >= 0 ? "text-green-500" : "text-red-500"
+            }`}
+          >
+            {token.priceChange >= 0 ? "+" : ""}
+            {token.priceChange}%
+          </span>
+          {token.priceChange >= 0 ? (
+            <ArrowUpRight className="w-4 h-4 text-green-500" />
+          ) : (
+            <ArrowDownRight className="w-4 h-4 text-red-500" />
+          )}
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
-        <div className="space-y-2">
-          <div className="flex items-center justify-between text-sm">
+      <div className="border-t border-b border-background-tertiary">
+        <TokenMetrics
+          holders={token.holders}
+          priceChange={token.priceChange}
+          liquidity={token.liquidity}
+          volume24h={token.volume24h}
+          age={token.age}
+          marketCap={token.marketCap}
+          transactions={token.transactions}
+          buys={token.buys}
+          sells={token.sells}
+          snipers={token.snipers}
+          botHolders={token.botHolders}
+          pumpProgress={token.pumpProgress}
+        />
+      </div>
+
+      <div className="mt-4 space-y-4">
+        <div className="grid grid-cols-2 gap-4">
+          <div className="flex items-center justify-between p-2 rounded-lg bg-background-tertiary/50">
             <div className="flex items-center gap-1.5 text-accent-green">
               <ArrowUp className="w-3.5 h-3.5" />
-              <span className="font-medium">{token.buys}</span>
+              <span className="font-medium text-sm">{token.buys}</span>
             </div>
             <div className="flex items-center gap-1.5 text-accent-red">
               <ArrowDown className="w-3.5 h-3.5" />
-              <span className="font-medium">{token.sells}</span>
+              <span className="font-medium text-sm">{token.sells}</span>
             </div>
           </div>
-          <div className="flex items-center gap-2 text-xs text-foreground-secondary">
+          <div className="flex items-center justify-between p-2 rounded-lg bg-background-tertiary/50">
             <div className="flex items-center gap-1">
-              <DollarSign className="w-3 h-3" />
-              <span>${formatNumber(token.volume)}</span>
+              <DollarSign className="w-3.5 h-3.5 text-foreground-secondary" />
+              <span className="text-sm text-foreground-secondary">
+                ${formatNumber(token.volume.toString())}
+              </span>
             </div>
             <div className="flex items-center gap-1">
-              <Coins className="w-3 h-3" />
-              <span>${formatNumber(token.marketCap)}</span>
+              <Coins className="w-3.5 h-3.5 text-foreground-secondary" />
+              <span className="text-sm text-foreground-secondary">
+                ${formatNumber(token.marketCap.toString())}
+              </span>
             </div>
           </div>
         </div>
-        <div className="space-y-2">
-          <div className="flex items-center gap-2 text-xs text-foreground-secondary">
-            <div className="flex items-center gap-1">
-              <Users className="w-3 h-3" />
-              <span>{formatNumber(token.holders.toString())}</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <TrendingUp className="w-3 h-3" />
-              <span>{token.stats.transactions}</span>
-            </div>
-          </div>
-          <div className="flex items-center gap-2 text-xs">
-            <span className="text-accent-green">
-              +{token.stats.priceChange5m}%
-            </span>
-            <span className="text-accent-red">
-              -{token.stats.priceChange1h}%
-            </span>
-          </div>
+
+        <div className="flex items-center justify-end">
+          <QuickBuy solAmount={quickBuyAmount} onBuy={() => {}} />
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

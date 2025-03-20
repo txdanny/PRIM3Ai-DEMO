@@ -1,24 +1,22 @@
 export interface Token {
-  symbol: string;
-  name: string;
+  price: any;
+  stats: any;
+  volume: any;
   address: string;
-  imageUrl?: string;
-  price: string;
-  volume: string;
-  marketCap: string;
-  liquidity: string;
+  name: string;
+  symbol: string;
+  logo: string;
+  priceChange: number;
+  holders: number;
+  liquidity: number;
+  volume24h: number;
+  age: string;
+  marketCap: number;
+  transactions: number;
   buys: number;
   sells: number;
-  holders: number;
-  social: {
-    twitter?: string;
-    website?: string;
-  };
-  stats: {
-    priceChange5m: string;
-    priceChange1h: string;
-    holders: number;
-    transactions: number;
-  };
+  snipers: number;
+  botHolders: number;
+  pumpProgress: number;
   createdAt: string;
 }
