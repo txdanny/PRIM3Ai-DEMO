@@ -149,17 +149,11 @@ const TokenCard: React.FC<TokenCardProps> = ({ token }) => {
       <div className="border-t border-b border-background-tertiary">
         <TokenMetrics
           holders={token.holders}
-          priceChange={token.priceChange}
-          liquidity={token.liquidity}
           volume24h={token.volume24h}
           age={token.age}
           marketCap={token.marketCap}
-          transactions={token.transactions}
-          buys={token.buys}
-          sells={token.sells}
           snipers={token.snipers}
           botHolders={token.botHolders}
-          pumpProgress={token.pumpProgress}
         />
       </div>
 

@@ -1,33 +1,14 @@
 import React from "react";
 import { motion } from "framer-motion";
-import {
-  Users,
-  TrendingUp,
-  Wallet,
-  Activity,
-  Timer,
-  Coins,
-  ArrowUpRight,
-  ArrowDownRight,
-  Zap,
-  Shield,
-  Bot,
-  Target,
-} from "lucide-react";
+import { Users, Activity, Timer, Bot, Target, Wallet } from "lucide-react";
 
 interface TokenMetricsProps {
   holders: number;
-  priceChange: number;
-  liquidity: number;
   volume24h: number;
   age: string;
   marketCap: number;
-  transactions: number;
-  buys: number;
-  sells: number;
   snipers: number;
   botHolders: number;
-  pumpProgress: number;
 }
 
 const MetricIcon = ({
@@ -54,37 +35,19 @@ const MetricIcon = ({
 
 const TokenMetrics: React.FC<TokenMetricsProps> = ({
   holders,
-  priceChange,
-  liquidity,
   volume24h,
   age,
   marketCap,
-  transactions,
-  buys,
-  sells,
   snipers,
   botHolders,
-  pumpProgress,
 }) => {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 py-3">
+    <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 py-3">
       <MetricIcon
         icon={Users}
         color="text-blue-500"
         tooltip="Holders"
         value={holders.toLocaleString()}
-      />
-      <MetricIcon
-        icon={TrendingUp}
-        color={priceChange >= 0 ? "text-green-500" : "text-red-500"}
-        tooltip="Price Change"
-        value={`${priceChange >= 0 ? "+" : ""}${priceChange}%`}
-      />
-      <MetricIcon
-        icon={Coins}
-        color="text-yellow-500"
-        tooltip="Liquidity"
-        value={`$${liquidity.toLocaleString()}`}
       />
       <MetricIcon
         icon={Activity}
@@ -105,24 +68,6 @@ const TokenMetrics: React.FC<TokenMetricsProps> = ({
         value={`$${marketCap.toLocaleString()}`}
       />
       <MetricIcon
-        icon={ArrowUpRight}
-        color="text-green-500"
-        tooltip="Transactions"
-        value={transactions.toLocaleString()}
-      />
-      <MetricIcon
-        icon={ArrowDownRight}
-        color="text-red-500"
-        tooltip="Sells"
-        value={sells.toLocaleString()}
-      />
-      <MetricIcon
-        icon={Zap}
-        color="text-blue-500"
-        tooltip="Buys"
-        value={buys.toLocaleString()}
-      />
-      <MetricIcon
         icon={Target}
         color="text-yellow-500"
         tooltip="Snipers"
@@ -133,12 +78,6 @@ const TokenMetrics: React.FC<TokenMetricsProps> = ({
         color="text-purple-500"
         tooltip="Bot Holders"
         value={botHolders.toLocaleString()}
-      />
-      <MetricIcon
-        icon={Shield}
-        color="text-green-500"
-        tooltip="Pump Progress"
-        value={`${pumpProgress}%`}
       />
     </div>
   );
